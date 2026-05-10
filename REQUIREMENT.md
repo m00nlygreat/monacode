@@ -3,6 +3,7 @@
 - Use Monaco Editor to open local PC files in Chrome/PWA as read-only content.
 - Support most common file extensions by default through PWA file handlers and file associations.
 - Use GitHub Pages static hosting and PWA file handlers for opening files from the OS.
+- Support opening a local file in the PWA by drag-and-drop as read-only content.
 - Build the browser extension package to `/dist`.
 - Build the GitHub Pages PWA to `/docs`.
 

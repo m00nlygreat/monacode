@@ -42,6 +42,11 @@ button:disabled {
   height: 100%;
 }
 
+.drag-over .editor {
+  outline: 2px solid #22c55e;
+  outline-offset: -2px;
+}
+
 .hidden-input {
   display: none;
 }
