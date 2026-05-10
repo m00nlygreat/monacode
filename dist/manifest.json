@@ -8,5 +8,23 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "permissions": []
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "file:///*",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "file:///*"
+      ],
+      "js": [
+        "content-bootstrap.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
 }

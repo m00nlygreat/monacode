@@ -4,6 +4,7 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+import { loadSettings } from './settings.js';
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -15,7 +16,7 @@ self.MonacoEnvironment = {
   },
 };
 
-const languageByExtension = new Map([
+const fallbackLanguageByExtension = new Map([
   ['css', 'css'],
   ['csv', 'plaintext'],
   ['html', 'html'],
@@ -33,9 +34,9 @@ const languageByExtension = new Map([
   ['yaml', 'yaml'],
 ]);
 
-export function languageForFileName(fileName = '') {
+export function languageForFileName(fileName = '', settings = loadSettings()) {
   const extension = fileName.split('.').pop()?.toLowerCase();
-  return languageByExtension.get(extension) || 'plaintext';
+  return settings.fileAssociations[extension] || fallbackLanguageByExtension.get(extension) || 'plaintext';
 }
 
 export { monaco };
@@ -81,6 +82,8 @@ function getLinkAtPosition(editor, position) {
 
 function enableLinkOpening(editor, openUri) {
   editor.onMouseDown((event) => {
+    if (!loadSettings().links) return;
+
     const mouseEvent = event.event.browserEvent;
     const isOpenGesture = mouseEvent.ctrlKey || mouseEvent.metaKey || mouseEvent.button === 1;
     if (!isOpenGesture) return;
@@ -98,6 +101,7 @@ function enableLinkOpening(editor, openUri) {
     label: 'Open Link Under Cursor',
     keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
     run: () => {
+      if (!loadSettings().links) return;
       const uri = getLinkAtPosition(editor, editor.getPosition());
       if (uri) openUri(uri);
     },
@@ -111,14 +115,16 @@ export function createEditor(
   actions = [],
   openUri = defaultOpenUri
 ) {
+  const settings = loadSettings();
   const editor = monaco.editor.create(container, {
     value,
-    language: languageForFileName(fileName),
+    language: languageForFileName(fileName, settings),
     automaticLayout: true,
-    minimap: { enabled: true },
-    theme: 'vs-dark',
-    fontSize: 14,
-    links: true,
+    minimap: { enabled: settings.minimap },
+    theme: settings.theme,
+    fontSize: settings.fontSize,
+    wordWrap: settings.wordWrap,
+    links: settings.links,
     scrollBeyondLastLine: false,
   });
 
@@ -156,4 +162,14 @@ export function updateEditorModel(editor, value, fileName = '') {
   const previousModel = editor.getModel();
   editor.setModel(model);
   previousModel?.dispose();
+}
+
+export function applyEditorSettings(editor, settings = loadSettings()) {
+  monaco.editor.setTheme(settings.theme);
+  editor.updateOptions({
+    fontSize: settings.fontSize,
+    wordWrap: settings.wordWrap,
+    minimap: { enabled: settings.minimap },
+    links: settings.links,
+  });
 }

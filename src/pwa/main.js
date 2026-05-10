@@ -1,13 +1,26 @@
 import '../shared/styles.css';
-import { createEditor, monaco, updateEditorModel } from '../shared/editor.js';
+import { applyEditorSettings, createEditor, monaco, updateEditorModel } from '../shared/editor.js';
+import { openSettingsDialog } from '../shared/settings-ui.js';
 
 const editorElement = document.querySelector('#editor');
 const fileInput = document.querySelector('#fileInput');
+
+function installManifestLink() {
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = new URL('manifest.webmanifest', document.baseURI).href;
+  document.head.append(link);
+}
 
 let fileHandle = null;
 let currentFileName = '';
 
 const editor = createEditor(editorElement, undefined, undefined, [
+  {
+    id: 'monacode.openSettings',
+    label: 'Open Settings',
+    run: openSettings,
+  },
   {
     id: 'monacode.openFile',
     label: 'Open File',
@@ -21,6 +34,13 @@ const editor = createEditor(editorElement, undefined, undefined, [
     run: saveFile,
   },
 ]);
+
+function openSettings() {
+  openSettingsDialog({
+    editor,
+    onSave: (settings) => applyEditorSettings(editor, settings),
+  });
+}
 
 function setCurrentFile(fileName, text) {
   currentFileName = fileName || 'Untitled';
@@ -85,3 +105,5 @@ if ('launchQueue' in window && 'LaunchParams' in window) {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js');
 }
+
+installManifestLink();

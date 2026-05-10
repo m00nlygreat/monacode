@@ -8,6 +8,7 @@ function copyExtensionManifest() {
     closeBundle() {
       copyFileSync(resolve('src/extension/manifest.json'), resolve('dist/manifest.json'));
       copyFileSync(resolve('src/extension/background.js'), resolve('dist/background.js'));
+      copyFileSync(resolve('src/extension/content-bootstrap.js'), resolve('dist/content-bootstrap.js'));
     },
   };
 }
