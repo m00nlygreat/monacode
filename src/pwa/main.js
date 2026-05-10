@@ -12,7 +12,6 @@ function installManifestLink() {
   document.head.append(link);
 }
 
-let fileHandle = null;
 let currentFileName = '';
 
 const editor = createEditor(editorElement, undefined, undefined, [
@@ -26,12 +25,6 @@ const editor = createEditor(editorElement, undefined, undefined, [
     label: 'Open File',
     keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO],
     run: openFile,
-  },
-  {
-    id: 'monacode.saveFile',
-    label: 'Save File',
-    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
-    run: saveFile,
   },
 ]);
 
@@ -60,7 +53,6 @@ async function openWithFileSystemAccess() {
     ],
   });
   const file = await handle.getFile();
-  fileHandle = handle;
   setCurrentFile(file.name, await file.text());
 }
 
@@ -78,17 +70,9 @@ async function openFile() {
   openWithInput();
 }
 
-async function saveFile() {
-  if (!fileHandle) return;
-  const writable = await fileHandle.createWritable();
-  await writable.write(editor.getValue());
-  await writable.close();
-}
-
 fileInput.addEventListener('change', async () => {
   const file = fileInput.files?.[0];
   if (!file) return;
-  fileHandle = null;
   setCurrentFile(file.name, await file.text());
 });
 
@@ -97,7 +81,6 @@ if ('launchQueue' in window && 'LaunchParams' in window) {
     const [handle] = launchParams.files || [];
     if (!handle) return;
     const file = await handle.getFile();
-    fileHandle = handle;
     setCurrentFile(file.name, await file.text());
   });
 }

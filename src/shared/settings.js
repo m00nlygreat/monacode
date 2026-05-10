@@ -1,51 +1,5 @@
 export const SETTINGS_STORAGE_KEY = 'monacode.settings.v1';
 
-export const EXTENSION_SETTINGS_STORAGE_KEY = 'monacode:settings';
-
-export const defaultAutoOpenExtensions = [
-  'bat',
-  'c',
-  'cjs',
-  'cpp',
-  'cs',
-  'css',
-  'csv',
-  'env',
-  'go',
-  'h',
-  'hpp',
-  'ini',
-  'java',
-  'js',
-  'json',
-  'jsx',
-  'less',
-  'log',
-  'mjs',
-  'php',
-  'ps1',
-  'py',
-  'rb',
-  'rs',
-  'scss',
-  'sh',
-  'sql',
-  'toml',
-  'ts',
-  'tsx',
-  'txt',
-  'xml',
-  'yaml',
-  'yml',
-];
-
-export const defaultAutoOpenFileNames = [
-  '.env',
-  '.gitignore',
-  'dockerfile',
-  'makefile',
-];
-
 export const defaultSettings = {
   theme: 'vs-dark',
   fontSize: 14,
@@ -67,8 +21,6 @@ export const defaultSettings = {
     yml: 'yaml',
     yaml: 'yaml',
   },
-  autoOpenExtensions: defaultAutoOpenExtensions,
-  autoOpenFileNames: defaultAutoOpenFileNames,
 };
 
 export function loadSettings() {
@@ -96,8 +48,6 @@ export function normalizeSettings(settings = {}) {
     minimap: typeof settings.minimap === 'boolean' ? settings.minimap : defaultSettings.minimap,
     links: typeof settings.links === 'boolean' ? settings.links : defaultSettings.links,
     fileAssociations: normalizeFileAssociations(settings.fileAssociations),
-    autoOpenExtensions: normalizeExtensionList(settings.autoOpenExtensions, defaultAutoOpenExtensions),
-    autoOpenFileNames: normalizeFileNameList(settings.autoOpenFileNames, defaultAutoOpenFileNames),
   };
 }
 
@@ -119,22 +69,4 @@ function normalizeFileAssociations(fileAssociations = {}) {
   }
 
   return normalizedAssociations;
-}
-
-function normalizeExtensionList(value, fallback) {
-  const source = Array.isArray(value) ? value : fallback;
-  return [...new Set(
-    source
-      .map((item) => String(item || '').trim().toLowerCase().replace(/^\./, ''))
-      .filter(Boolean)
-  )];
-}
-
-function normalizeFileNameList(value, fallback) {
-  const source = Array.isArray(value) ? value : fallback;
-  return [...new Set(
-    source
-      .map((item) => String(item || '').trim().toLowerCase())
-      .filter(Boolean)
-  )];
 }

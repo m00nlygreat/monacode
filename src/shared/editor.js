@@ -47,16 +47,14 @@ On macOS, use Cmd+K or Cmd+Shift+P.
 
 Commands:
 - Open File
-- Save File
 - Open Link Under Cursor
 
 Links:
 - https://example.com
-- file:///C:/path/to/file.txt
 */
 `;
 
-const urlPattern = /\b(?:https?:\/\/|file:\/\/)[^\s<>"'`)}\]]+/g;
+const urlPattern = /\bhttps?:\/\/[^\s<>"'`)}\]]+/g;
 
 function defaultOpenUri(uri) {
   window.open(uri, '_blank', 'noopener');

@@ -53,14 +53,6 @@ export function openSettingsDialog({ editor, onSave } = {}) {
           <span>File associations</span>
           <textarea name="fileAssociations" spellcheck="false"></textarea>
         </label>
-        <label class="settings-field settings-field-full">
-          <span>Auto-open extensions</span>
-          <textarea name="autoOpenExtensions" spellcheck="false"></textarea>
-        </label>
-        <label class="settings-field settings-field-full">
-          <span>Auto-open filenames</span>
-          <textarea name="autoOpenFileNames" spellcheck="false"></textarea>
-        </label>
       </section>
       <footer class="settings-footer">
         <button type="button" data-reset>Reset</button>
@@ -98,8 +90,6 @@ function writeSettingsToForm(form, settings) {
   form.elements.fileAssociations.value = Object.entries(settings.fileAssociations)
     .map(([extension, language]) => `${extension}: ${language}`)
     .join('\n');
-  form.elements.autoOpenExtensions.value = settings.autoOpenExtensions.join('\n');
-  form.elements.autoOpenFileNames.value = settings.autoOpenFileNames.join('\n');
 }
 
 function readSettingsFromForm(form) {
@@ -110,8 +100,6 @@ function readSettingsFromForm(form) {
     minimap: form.elements.minimap.checked,
     links: form.elements.links.checked,
     fileAssociations: parseFileAssociations(form.elements.fileAssociations.value),
-    autoOpenExtensions: parseList(form.elements.autoOpenExtensions.value),
-    autoOpenFileNames: parseList(form.elements.autoOpenFileNames.value, { keepDot: true }),
   };
 }
 
@@ -130,14 +118,4 @@ function parseFileAssociations(value) {
   }
 
   return fileAssociations;
-}
-
-function parseList(value, options = {}) {
-  return value
-    .split(/\r?\n|,/)
-    .map((item) => {
-      const trimmedItem = item.trim();
-      return options.keepDot ? trimmedItem : trimmedItem.replace(/^\./, '');
-    })
-    .filter(Boolean);
 }
