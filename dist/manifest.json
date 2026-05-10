@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Monacode",
+  "version": "0.1.0",
+  "description": "Open and edit local files with Monaco Editor.",
+  "action": {},
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": []
+}

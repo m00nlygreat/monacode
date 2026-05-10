@@ -1,0 +1,18 @@
+{
+  "name": "monacode",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:pwa": "vite --config vite.pwa.config.js",
+    "dev:extension": "vite --config vite.extension.config.js",
+    "build:pwa": "vite build --config vite.pwa.config.js",
+    "build:extension": "vite build --config vite.extension.config.js",
+    "build": "npm run build:pwa && npm run build:extension"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.52.0",
+    "vite": "^5.4.11"
+  },
+  "devDependencies": {}
+}
