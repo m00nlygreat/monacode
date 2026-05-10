@@ -10,6 +10,7 @@ function copyPwaStaticFiles() {
       mkdirSync(resolve(outDir, 'icons'), { recursive: true });
       copyFileSync(resolve('src/pwa/manifest.webmanifest'), resolve(outDir, 'manifest.webmanifest'));
       copyFileSync(resolve('src/pwa/sw.js'), resolve(outDir, 'sw.js'));
+      copyFileSync(resolve(outDir, 'index.html'), resolve(outDir, '404.html'));
       cpSync(resolve('src/pwa/icons'), resolve(outDir, 'icons'), { recursive: true });
     },
   };

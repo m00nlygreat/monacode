@@ -1,7 +1,7 @@
 {
   "name": "Monacode",
   "short_name": "Monacode",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#111827",
@@ -16,7 +16,7 @@
   ],
   "file_handlers": [
     {
-      "action": "./",
+      "action": "./index.html",
       "accept": {
         "text/*": [".css", ".csv", ".html", ".js", ".json", ".md", ".ts", ".txt", ".xml", ".yaml", ".yml"]
       }
