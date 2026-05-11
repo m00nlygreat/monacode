@@ -54,7 +54,9 @@ Open the command palette with:
 
 Useful commands:
 
-- \`Monacode: Open File\` opens a local file as read-only content.
+- \`Monacode: Open File\` opens a local file.
+- \`Monacode: Save\` writes changes back to the current file when possible.
+- \`Monacode: Save As...\` saves the current document to a new file.
 - \`Monacode: Open Link Under Cursor\` opens the URL at the cursor.
 - \`Monacode: Open Settings\` changes the theme, font size, word wrap, minimap, links, and file associations.
 
@@ -71,7 +73,7 @@ Useful commands:
 
 | Feature | Notes |
 | --- | --- |
-| Read-only files | Local files are viewed without save behavior. |
+| Local files | Open, edit, and save files from the browser. |
 | File associations | Extension-to-language mappings can be edited in settings. |
 | Links | Ctrl/Cmd-click or use the command palette command. |
 
