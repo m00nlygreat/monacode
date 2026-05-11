@@ -18,12 +18,12 @@ let currentFileName = '';
 const editor = createEditor(editorElement, undefined, undefined, [
   {
     id: 'monacode.openSettings',
-    label: 'Open Settings',
+    label: 'Monacode: Open Settings',
     run: openSettings,
   },
   {
     id: 'monacode.openFile',
-    label: 'Open File',
+    label: 'Monacode: Open File',
     keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO],
     run: openFile,
   },

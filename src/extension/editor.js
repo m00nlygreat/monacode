@@ -10,6 +10,10 @@ Monacode extension opens http and https links only.
 Open the Command Palette with Ctrl+K or Ctrl+Shift+P.
 On macOS, use Cmd+K or Cmd+Shift+P.
 
+Commands:
+- Monacode: Open Settings
+- Monacode: Open Link Under Cursor
+
 Link:
 - https://example.com
 */
@@ -18,7 +22,7 @@ Link:
 const editor = createEditor(editorElement, EXTENSION_WELCOME, 'monacode-extension.js', [
   {
     id: 'monacode.openSettings',
-    label: 'Open Settings',
+    label: 'Monacode: Open Settings',
     run: openSettings,
   },
 ], openUri);

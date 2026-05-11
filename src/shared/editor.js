@@ -41,17 +41,50 @@ export function languageForFileName(fileName = '', settings = loadSettings()) {
 
 export { monaco };
 
-export const DEFAULT_EDITOR_VALUE = `/*
-Open the Command Palette with Ctrl+K or Ctrl+Shift+P.
-On macOS, use Cmd+K or Cmd+Shift+P.
+export const DEFAULT_EDITOR_VALUE = `# Welcome to Monacode
 
-Commands:
-- Open File
-- Open Link Under Cursor
+Monacode is a quiet Monaco Editor viewer for local code and text files. Drop a file here or use the command palette to open one.
 
-Links:
-- https://example.com
-*/
+## Command Palette
+
+Open the command palette with:
+
+- Windows/Linux: \`Ctrl+K\` or \`Ctrl+Shift+P\`
+- macOS: \`Cmd+K\` or \`Cmd+Shift+P\`
+
+Useful commands:
+
+- \`Monacode: Open File\` opens a local file as read-only content.
+- \`Monacode: Open Link Under Cursor\` opens the URL at the cursor.
+- \`Monacode: Open Settings\` changes the theme, font size, word wrap, minimap, links, and file associations.
+
+## Try Markdown
+
+### Checklist
+
+- [x] Syntax highlighting
+- [x] File drag-and-drop
+- [x] Link opening
+- [ ] Open your own file
+
+### Sample Table
+
+| Feature | Notes |
+| --- | --- |
+| Read-only files | Local files are viewed without save behavior. |
+| File associations | Extension-to-language mappings can be edited in settings. |
+| Links | Ctrl/Cmd-click or use the command palette command. |
+
+### Code Block
+
+\`\`\`js
+const message = 'Open a file to replace this sample document.';
+console.log(message);
+\`\`\`
+
+### Link
+
+https://example.com
 `;
 
 const urlPattern = /\bhttps?:\/\/[^\s<>"'`)}\]]+/g;
@@ -96,7 +129,7 @@ function enableLinkOpening(editor, openUri) {
 
   editor.addAction({
     id: 'monacode.openLinkUnderCursor',
-    label: 'Open Link Under Cursor',
+    label: 'Monacode: Open Link Under Cursor',
     keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
     run: () => {
       if (!loadSettings().links) return;
@@ -109,7 +142,7 @@ function enableLinkOpening(editor, openUri) {
 export function createEditor(
   container,
   value = DEFAULT_EDITOR_VALUE,
-  fileName = 'monacode-welcome.js',
+  fileName = 'monacode-welcome.md',
   actions = [],
   openUri = defaultOpenUri
 ) {
