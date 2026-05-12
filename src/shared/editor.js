@@ -17,25 +17,104 @@ self.MonacoEnvironment = {
 };
 
 const fallbackLanguageByExtension = new Map([
+  ['bash', 'shell'],
+  ['babelrc', 'json'],
+  ['bat', 'bat'],
+  ['c', 'cpp'],
+  ['cc', 'cpp'],
+  ['cjs', 'javascript'],
+  ['cmd', 'bat'],
+  ['config', 'ini'],
+  ['conf', 'ini'],
+  ['cpp', 'cpp'],
+  ['cs', 'csharp'],
   ['css', 'css'],
   ['csv', 'plaintext'],
+  ['cxx', 'cpp'],
+  ['dockerignore', 'plaintext'],
+  ['dockerfile', 'dockerfile'],
+  ['editorconfig', 'ini'],
+  ['env', 'ini'],
+  ['eslintrc', 'json'],
+  ['gitignore', 'plaintext'],
+  ['gql', 'graphql'],
+  ['go', 'go'],
+  ['graphql', 'graphql'],
+  ['h', 'cpp'],
+  ['hcl', 'hcl'],
+  ['hpp', 'cpp'],
   ['html', 'html'],
   ['htm', 'html'],
+  ['ini', 'ini'],
+  ['java', 'java'],
   ['js', 'javascript'],
   ['json', 'json'],
+  ['jsonl', 'json'],
   ['jsx', 'javascript'],
+  ['kt', 'kotlin'],
+  ['kts', 'kotlin'],
+  ['less', 'less'],
+  ['lock', 'plaintext'],
+  ['log', 'plaintext'],
+  ['markdown', 'markdown'],
   ['md', 'markdown'],
+  ['mdx', 'mdx'],
   ['mjs', 'javascript'],
+  ['ndjson', 'json'],
+  ['php', 'php'],
+  ['postcss', 'css'],
+  ['prettierrc', 'json'],
+  ['properties', 'ini'],
+  ['proto', 'protobuf'],
+  ['ps1', 'powershell'],
+  ['py', 'python'],
+  ['pyw', 'python'],
+  ['rb', 'ruby'],
+  ['rs', 'rust'],
+  ['rst', 'restructuredtext'],
+  ['sass', 'scss'],
+  ['scala', 'scala'],
+  ['scss', 'scss'],
+  ['sh', 'shell'],
+  ['sql', 'sql'],
+  ['svg', 'xml'],
+  ['svelte', 'html'],
+  ['swift', 'swift'],
+  ['tf', 'hcl'],
+  ['tfvars', 'hcl'],
+  ['toml', 'ini'],
   ['ts', 'typescript'],
   ['tsx', 'typescript'],
   ['txt', 'plaintext'],
+  ['vue', 'html'],
   ['xml', 'xml'],
+  ['zsh', 'shell'],
   ['yml', 'yaml'],
   ['yaml', 'yaml'],
 ]);
 
+const fallbackLanguageByFileName = new Map([
+  ['.babelrc', 'json'],
+  ['.dockerignore', 'plaintext'],
+  ['.editorconfig', 'ini'],
+  ['.env', 'ini'],
+  ['.eslintrc', 'json'],
+  ['.gitignore', 'plaintext'],
+  ['.prettierrc', 'json'],
+  ['cmakelists.txt', 'plaintext'],
+  ['dockerfile', 'dockerfile'],
+  ['makefile', 'plaintext'],
+]);
+
 export function languageForFileName(fileName = '', settings = loadSettings()) {
-  const extension = fileName.split('.').pop()?.toLowerCase();
+  const normalizedFileName = fileName.split(/[\\/]/).pop()?.toLowerCase() || '';
+  const configuredLanguage = settings.fileAssociations[normalizedFileName.replace(/^\./, '')];
+  if (configuredLanguage) return configuredLanguage;
+
+  const fileNameLanguage = fallbackLanguageByFileName.get(normalizedFileName);
+  if (fileNameLanguage) return fileNameLanguage;
+
+  const extension = normalizedFileName.split('.').pop()?.toLowerCase();
   return settings.fileAssociations[extension] || fallbackLanguageByExtension.get(extension) || 'plaintext';
 }
 
