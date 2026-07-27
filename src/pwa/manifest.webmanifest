@@ -1,6 +1,7 @@
 {
   "name": "Monacode",
   "short_name": "Monacode",
+  "id": "./index.html",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

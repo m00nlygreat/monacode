@@ -92,7 +92,7 @@ const filePickerTypes = [
 function installManifestLink() {
   const link = document.createElement('link');
   link.rel = 'manifest';
-  link.href = new URL('manifest.webmanifest', document.baseURI).href;
+  link.href = new URL('manifest.webmanifest?v=3', document.baseURI).href;
   document.head.append(link);
 }
 
@@ -466,7 +466,7 @@ document.addEventListener('drop', async (event) => {
 }, true);
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js');
+  navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
 }
 
 installManifestLink();
