@@ -96,48 +96,96 @@ function installManifestLink() {
   document.head.append(link);
 }
 
+const isBlankDocumentLaunch = new URLSearchParams(window.location.search).has('new');
+const isStandaloneApp =
+  window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+function takeFirstLaunchWelcome() {
+  if (!isStandaloneApp || isBlankDocumentLaunch) return false;
+
+  try {
+    const storageKey = 'monacode.welcomeShown';
+    if (window.localStorage.getItem(storageKey)) return false;
+    window.localStorage.setItem(storageKey, 'true');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const shouldShowWelcome = takeFirstLaunchWelcome();
+
 let currentDocument = {
-  name: 'monacode-welcome.md',
+  name: shouldShowWelcome ? 'monacode-welcome.md' : 'Untitled',
   handle: null,
-  source: 'sample',
+  source: shouldShowWelcome ? 'sample' : 'new',
   dirty: false,
   lastModified: null,
 };
 
 let statusTimer = 0;
 
-const editor = createEditor(editorElement, undefined, undefined, [
-  {
-    id: 'monacode.openSettings',
-    label: 'Monacode: Open Settings',
-    run: openSettings,
-  },
-  {
-    id: 'monacode.openFile',
-    label: 'Monacode: Open File',
-    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO],
-    run: openFile,
-  },
-  {
-    id: 'monacode.save',
-    label: 'Monacode: Save',
-    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
-    run: saveFile,
-  },
-  {
-    id: 'monacode.saveAs',
-    label: 'Monacode: Save As...',
-    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyS],
-    run: saveFileAs,
-  },
-]);
+const editor = createEditor(
+  editorElement,
+  shouldShowWelcome ? undefined : '',
+  shouldShowWelcome ? undefined : currentDocument.name,
+  [
+    {
+      id: 'monacode.openSettings',
+      label: 'Monacode: Open Settings',
+      run: openSettings,
+    },
+    {
+      id: 'monacode.openFile',
+      label: 'Monacode: Open File',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO],
+      run: openFile,
+    },
+    {
+      id: 'monacode.save',
+      label: 'Monacode: Save',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
+      run: saveFile,
+    },
+    {
+      id: 'monacode.saveAs',
+      label: 'Monacode: Save As...',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyS],
+      run: saveFileAs,
+    },
+  ],
+);
+
+document.title = `${currentDocument.name} - Monacode`;
 
 editor.onDidChangeModelContent(() => {
   setDirty(true);
 });
 
+function openBlankDocumentWindow() {
+  const appUrl = new URL('./index.html?new=1', window.location.href);
+  window.open(appUrl, '_blank', 'noopener');
+}
+
 document.addEventListener('keydown', (event) => {
-  const isSaveShortcut = (event.ctrlKey || event.metaKey) && event.code === 'KeyS';
+  const hasCommandModifier = event.ctrlKey || event.metaKey;
+  const isNewDocumentShortcut =
+    hasCommandModifier &&
+    !event.altKey &&
+    !event.shiftKey &&
+    (event.code === 'KeyN' || event.code === 'KeyT');
+  const isSaveShortcut = hasCommandModifier && event.code === 'KeyS';
+
+  if (isNewDocumentShortcut) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!event.repeat) {
+      openBlankDocumentWindow();
+    }
+    return;
+  }
+
   if (!isSaveShortcut) return;
 
   event.preventDefault();

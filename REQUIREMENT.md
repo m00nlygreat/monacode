@@ -5,6 +5,9 @@
 - Use GitHub Pages static hosting and PWA file handlers for opening files from the OS.
 - Support opening a local file in the PWA by drag-and-drop.
 - Support saving edited local files in the PWA when a writable file handle is available.
+- Open every installed-app or OS file-handler launch in a new PWA window.
+- Open a blank document in a new PWA window for Ctrl/Cmd+N and Ctrl/Cmd+T.
+- Show the welcome document only on the first installed-app launch; start later no-file launches blank.
 - Build the browser extension package to `/dist`.
 - Build the GitHub Pages PWA to `/docs`.
 
